@@ -1,49 +1,3 @@
--- In this assignment, you'll be building the domain model, database 
--- structure, and data for "KMDB" (the Kellogg Movie Database).
--- The end product will be a report that prints the movies and the 
--- top-billed cast for each movie in the database.
-
--- Requirements/assumptions
---
--- - There will only be three movies in the database – the three films
---   that make up Christopher Nolan's Batman trilogy.
--- - Movie data includes the movie title, year released, MPAA rating,
---   and studio.
--- - There are many studios, and each studio produces many movies, but
---   a movie belongs to a single studio.
--- - An actor can be in multiple movies.
--- - Everything you need to do in this assignment is marked with TODO!
-DROP TABLE IF EXISTS movies;
-DROP TABLE IF EXISTS studio;
-DROP TABLE IF EXISTS cast;
--- User stories
---
--- - As a guest, I want to see a list of movies with the title, year released,
---   MPAA rating, and studio information.
-CREATE TABLE movies (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  title TEXT,
-  year INTEGER,
-  rating TEXT,
-  studio_id INTEGER
-);
--- - As a guest, I want to see the movies which a single studio has produced.
-CREATE TABLE studio (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  studio_name TEXT
-);
--- - As a guest, I want to see each movie's cast including each actor's
---   name and the name of the character they portray.
-CREATE TABLE cast (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  actor TEXT,
-  character TEXT,
-  movie_id INTEGER
-);
--- - As a guest, I want to see the movies which a single actor has acted in.
--- * Note: The "guest" user role represents the experience prior to logging-in
---   to an app and typically does not have a corresponding database table.
-
 
 -- Deliverables
 -- 
@@ -121,13 +75,60 @@ CREATE TABLE cast (
 -- Drop existing tables, so you'll start fresh each time this script is run.
 -- TODO!
 
+DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS studio;
+DROP TABLE IF EXISTS cast_member;
+
 -- Create new tables, according to your domain model
 -- TODO!
+
+CREATE TABLE movies (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT,
+  year INTEGER,
+  rating TEXT,
+  studio_id INTEGER
+);
+CREATE TABLE studio (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  studio_name TEXT
+);
+
+CREATE TABLE cast_member (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  actor TEXT,
+  character TEXT,
+  movie_id INTEGER
+);
+
 
 -- Insert data into your database that reflects the sample data shown above
 -- Use hard-coded foreign key IDs when necessary
 -- TODO!
+INSERT INTO studio (studio_name)
+VALUES ('Warner Bros.');
 
+INSERT INTO movies (title, year, rating, studio_id)
+VALUES ('Batman Begins', 2005,'PG-13',1),
+ ('The Dark Knight', 2008,'PG-13',1),
+ ('The Dark Knight Rises', 2012,'PG-13', 1);
+
+INSERT INTO cast_member (actor, character, movie_id)
+VALUES ('Christian Bale', 'Bruce Wayne',1),
+ ('Michael Caine', 'Alfred',1),
+ ('Liam Neeson', 'Ras Al Ghul',1),
+ ('Katie Holmes', 'Rachel Dawes',1),
+ ('Gary Oldman', 'Commissioner Gordon',1),
+ ('Christian Bale', 'Bruce Wayne',2),
+ ('Michael Caine', 'Alfred',2),
+ ('Heath Ledger', 'Joker',2),
+ ('Aaron Eckhart', 'Harvey Dent',2),
+ ('Maggie Gyllenhaal', 'Rachel Dawes',2),
+ ('Christian Bale', 'Bruce Wayne',3),
+ ('Tom Hardy', 'Bane',3),
+ ('Joseph Gordon-Levitt', 'John Blake',3),
+ ('Anne Hathaway', 'Selina Kyle',3),
+ ('Gary Oldman', 'Commissioner Gordon',3);
 -- Prints a header for the movies output
 .print "Movies"
 .print "======"
@@ -135,6 +136,7 @@ CREATE TABLE cast (
 
 -- The SQL statement for the movies output
 -- TODO!
+SELECT movies.title, movies.year, movies.rating, studio.studio_name FROM studio INNER JOIN movies ON studio.id = movies.studio_id;
 
 -- Prints a header for the cast output
 .print ""
@@ -145,3 +147,5 @@ CREATE TABLE cast (
 
 -- The SQL statement for the cast output
 -- TODO!
+SELECT movies.title, cast_member.actor, cast_member.character FROM cast_member INNER JOIN movies ON cast_member.movie_id = movies.id;
+-- Batman Begins          Christian Bale        Bruce Wayn
