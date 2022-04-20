@@ -13,14 +13,33 @@
 --   a movie belongs to a single studio.
 -- - An actor can be in multiple movies.
 -- - Everything you need to do in this assignment is marked with TODO!
-
+DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS studio;
+DROP TABLE IF EXISTS cast;
 -- User stories
 --
 -- - As a guest, I want to see a list of movies with the title, year released,
 --   MPAA rating, and studio information.
+CREATE TABLE movies (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT,
+  year INTEGER,
+  rating TEXT,
+  studio_id INTEGER
+);
 -- - As a guest, I want to see the movies which a single studio has produced.
+CREATE TABLE studio (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  studio_name TEXT
+);
 -- - As a guest, I want to see each movie's cast including each actor's
 --   name and the name of the character they portray.
+CREATE TABLE cast (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  actor TEXT,
+  character TEXT,
+  movie_id INTEGER
+);
 -- - As a guest, I want to see the movies which a single actor has acted in.
 -- * Note: The "guest" user role represents the experience prior to logging-in
 --   to an app and typically does not have a corresponding database table.
